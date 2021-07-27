@@ -5,6 +5,7 @@ const bodyParser = require ('body-parser');
 
 const userRoutes = require('./routes/user');
 const postsRoutes = require('./routes/post');
+const commentsRoutes = require('./routes/comment')
 
 const app = express();
 
@@ -24,5 +25,6 @@ app.use(helmet());
 // Implémentations des routes
 app.use('/api/users', userRoutes);
 app.use('/api/posts', postsRoutes);
+app.use('/api/comments', commentsRoutes);
 
 module.exports = app;

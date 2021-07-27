@@ -9,5 +9,6 @@ router.post('/login', usersCtrl.login);
 router.delete('/:id', usersCtrl.deleteAccount);
 router.get('/:id', usersCtrl.getOneUser);
 router.get('/', usersCtrl.getAllUsers);
+router.post('/jwt', usersCtrl.getUserByJwt);
 
 module.exports = router;

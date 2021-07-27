@@ -14,8 +14,8 @@ const User = UserModel(sequelize);
 const Comment = CommentModel(sequelize)
 const Post = PostModel(sequelize)
 
-Comment.belongsTo(User);
 Post.belongsTo(User);
+Comment.belongsTo(User);
 Comment.belongsTo(Post);
 
 // sequelize.sync()

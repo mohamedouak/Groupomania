@@ -33,10 +33,7 @@ exports.signup = (req, res) => {
                     };
                     User.create(user)
                         .then(user => {
-                            res.status(201).json({
-                                username: user.username,
-                                token: jwt.sign({ userId: user.id }, '7fa4efcef04a839925bf05fb227487cc', { expiresIn: '24h' })
-                            });
+                            res.status(201).json('Utilisateur crée');
                         })
                         .catch(error => res.status(400).json({ error }));
                     })
@@ -65,9 +62,7 @@ exports.login = (req, res) => {
                             if (!valid) {
                                 res.status(401).json({ error: 'Mot de passe incorrect' });
                             } else {
-                                res.status(200).json({ 
-                                    username: user.username,
-                                    isAdmin: user.isAadmin,
+                                res.status(200).json({
                                     token: jwt.sign({ userId: user.id }, '7fa4efcef04a839925bf05fb227487cc', { expiresIn: '24h' }) 
                                 });
                             }
@@ -83,26 +78,6 @@ exports.login = (req, res) => {
     }
 };
 
-
-
-// Suppression du compte
-// exports.deleteAccount = (req, res) => {
-//     User.findOne({ where: { username: req.body.username } })
-//         .then(user => {
-//             bcrypt.compare(req.body.password, user.password)
-//                 .then(valid => {
-//                     if (!valid) {
-//                     res.status(400).json({ error: 'Mot de passe incorrect' });
-//                     } else {
-//                         User.destroy({ where: { username: req.body.username } })
-//                             .then(() => res.status(200).json({ message: 'Utilisateur supprimé de la base de données' }))
-//                             .catch(error => res.status(500).json({ error }));
-//                     }
-//                 })
-//                 .catch(error => res.status(500).json({ error }))
-//         })
-//         .catch(error => res.status(500).json({ error }));
-// };
 exports.deleteAccount = (req, res) => {
     const id = req.params.id;
     User.destroy({where: {id:id}})
@@ -127,7 +102,9 @@ exports.deleteAccount = (req, res) => {
 
 exports.getOneUser = (req, res) => {
     const id = req.params.id
-    User.findOne()
+    User.findOne({
+        where: {id:id}
+    })
     .then(user => {
         if(user){
             res.status(200).json(user);
@@ -152,5 +129,31 @@ exports.getAllUsers = (req, res) => {
 		.catch((err) => res.status(401).json({
 			err
 		}));
+};
+
+exports.getUserByJwt = (req, res) => {
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(token, '7fa4efcef04a839925bf05fb227487cc');
+    const userId = decodedToken.userId;
+    if (userId) {
+        User.findOne({
+            where:{id:userId}
+        })
+        .then(user => {
+            if(user){
+                res.status(200).json(user);
+            }else{
+                res.status(404).json({
+                    message: 'Utilisateur non trouvé'
+                })
+            }
+        })
+        .catch(error => {
+            res.status(500).json({
+                message: error
+            })
+        })
+    }
+    
 };
 
