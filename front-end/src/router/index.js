@@ -8,15 +8,26 @@ const routes = [
     component: Home
   },
   {
-    path: '/register',
-    name: 'Register',
-    component: () => import('../views/Register.vue')
+    path: '/signup',
+    name: 'Signup',
+    component: () => import('../components/Signup.vue')
   },
-  // {
-  //   path: 'login',
-  //   name: 'Login',
-  //   component: () => import('../views/Login.vue')
-  // }
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import('../components/Login.vue')
+  },
+  {
+    path: '/account',
+    name: 'Account',
+    component: () => import('../views/Account.vue')
+  },
+  {
+    path: '/forum',
+    name: 'Forum',
+    component: () => import('../views/Forum.vue')
+
+  }
 ]
 
 const router = createRouter({

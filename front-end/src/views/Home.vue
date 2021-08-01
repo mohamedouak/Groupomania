@@ -8,8 +8,17 @@
 // @ is an alias to /src
 
 export default {
-  name: 'Home',
+  name: "Home",
   components: {
   }
 }
 </script>
+<style lang="scss">
+  .home{
+  img {
+    object-fit: cover;
+    width: 50%;
+    height: 400px;
+  }
+}
+</style>

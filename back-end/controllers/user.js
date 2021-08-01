@@ -63,13 +63,19 @@ exports.login = (req, res) => {
                                 res.status(401).json({ error: 'Mot de passe incorrect' });
                             } else {
                                 res.status(200).json({
-                                    token: jwt.sign({ userId: user.id }, '7fa4efcef04a839925bf05fb227487cc', { expiresIn: '24h' }) 
+                                    username: user.username,
+                                    token: jwt.sign({ userId: user.id }, '7fa4efcef04a839925bf05fb227487cc', { expiresIn: '24h' }), 
+                                    isAdmin: user.isAdmin
                                 });
                             }
                         })
                         .catch(error => res.status(500).json({ error }));
                 } else {
                     res.status(401).json({ error: 'Connexion refusée' });
+                }
+                if (req.body.username != user.username) {
+                    res.status(404).json({ error: 'Connexion refusée' });
+
                 }
             })
             .catch(error => res.status(500).json({ error }))
@@ -132,9 +138,12 @@ exports.getAllUsers = (req, res) => {
 };
 
 exports.getUserByJwt = (req, res) => {
+    console.log(req.headers);
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, '7fa4efcef04a839925bf05fb227487cc');
     const userId = decodedToken.userId;
+    console.log(req.headers.authorization.split(' '));
+    
     if (userId) {
         User.findOne({
             where:{id:userId}

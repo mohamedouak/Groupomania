@@ -1,9 +1,10 @@
-const {Sequelize} = require('sequelize')
-const UserModel = require('./models/user')
-const CommentModel = require('./models/comment')
-const PostModel = require('./models/post')
+const {Sequelize} = require('sequelize');
+const UserModel = require('./models/user');
+const CommentModel = require('./models/comment');
+const PostModel = require('./models/post');
+const env = require('dotenv').config();
 
-const sequelize = new Sequelize('mysql://root:@localhost:3306/groupomania') // Example for postgres
+const sequelize = new Sequelize(`mysql://${process.env.DB_USER}:@${process.env.DB_HOST}/${process.env.DB_NAME}`) // Example for postgres
 
 sequelize
   .authenticate()
