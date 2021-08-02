@@ -27,49 +27,20 @@ export default {
 
 #nav {
   padding: 30px;
-
+  background-color: #0c2444;
   a {
     font-weight: bold;
-    color: #2c3e50;
+    color: white;
+    text-decoration-line: none;
 
     &.router-link-exact-active {
-      color: #42b983;
+      color: rgb(238, 150, 
+150);
     }
   }
 }
 
-.signup, .login {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    img {
-        width: 25%;
-        height: 100px;
-        object-fit: cover;
-    }
-    input, button {
-      font-size: 1.2em;
-        width: 300px;
-        height: 40px;
-        padding: 10px;
-        display: block;
-        border: 1px solid skyblue;
-        margin: 10px 0;
-    }
-    button {
-        padding: 10px;
-        background: skyblue;
-        color: #fff;
-        cursor: pointer;
-        border: 1px solid skyblue;
-    }
-    a {
-        text-decoration-line: none;
-        color: black;
-        cursor: pointer;
-    }
-}
+
 .connect {
   p {
     display: flex;

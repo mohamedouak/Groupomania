@@ -1,5 +1,14 @@
 <template>
   <div class="comment">
+    <h1>Commentaires</h1>    
+    <div class="buttonComment"></div>
+    <div class="commentList" v-for="comment in comments" :key="comment.id">
+      <h2>{{ comment.user.username }}</h2>
+      <p>{{ comment.content }}</p>
+      <button v-if="isAdmin === 1 || comment.user.username === username" @click.prevent="deleteComment(comment.id)">
+        supprimer
+      </button>
+    </div>
     <button @click.prevent="displayEditComment()">
       Laisser un commentaire
     </button>
@@ -11,16 +20,8 @@
       maxlength="70"
     ></textarea>
     <div v-if="displayInput == true" class="commentbutton">
-      <button @click.prevent="displayEditComment()">annuler</button>
+      <button @click.prevent="displayEditComment()">Annuler</button>
       <button @click="sendComment()">Envoyer</button>
-    </div>
-    <div class="buttonComment"></div>
-    <div class="commentList" v-for="comment in comments" :key="comment.id">
-      <p>{{ comment.user.username }}</p>
-      <p>{{ comment.content }}</p>
-      <button v-if="isAdmin === 1 || comment.user.username === username" @click.prevent="deleteComment(comment.id)">
-        supprimer
-      </button>
     </div>
   </div>
 </template>
@@ -37,8 +38,8 @@ export default {
       comments: "",
       content: null,
       displayInput: false,
-      isAdmin: parseInt(localStorage.getItem("isAdmin")),
-      username: localStorage.getItem("username")
+      isAdmin: 0,
+      username: ""
     };
   },
   methods: {
@@ -72,6 +73,7 @@ export default {
     },
     displayEditComment() {
       this.displayInput = this.displayInput === true ? false : true;
+      this.content = "";
     },
     deleteComment(comment) {
       console.log(comment);
@@ -89,9 +91,27 @@ export default {
           });
       }
     },
+    getUserByToken() {
+      axios
+        .post(
+          "http://localhost:3000/api/users/jwt",
+          {},
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+          }
+        )
+        .then((response) => {
+          this.isAdmin = response.data.isAdmin;
+          this.username = response.data.username;
+          console.log(response.data);
+        });
+    },
   },
   mounted() {
     this.getAllComments();
+    this.getUserByToken();
   },
 };
 </script>

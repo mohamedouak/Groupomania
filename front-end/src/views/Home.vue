@@ -1,6 +1,10 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/icon-above-font.png">
+  <div class="home">   
+    <h1>Bienvenue chez <img alt="Vue logo" src="../assets/icon-left-font.png"></h1>
+    <div class="ident">
+      <router-link to="/signup">S'inscrire</router-link>
+      <router-link to="/login">Se connecter</router-link>
+    </div>  
   </div>
 </template>
 

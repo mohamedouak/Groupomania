@@ -1,49 +1,64 @@
 <template>
-  <div class="forum">
-    <h1>Bienvenue à toi sur le forum Groupomania</h1>
-    <form>
-      <input type="text" v-model="title" placeholder="Titre" />
-      <textarea
-        id="content"
-        v-model="content"
-        rows="10"
-        maxlength="200"
-      ></textarea>
-      <div>
-        <label>Sélectionnez votre image</label>
-        <input type="file" id="picture" />
-      </div>
-      <div>
-        <button @click.prevent="sendPost()">Publier</button>
-      </div>
-    </form>
-    <div class="post" v-for="post in posts" :key="post.id">
-      <div class="textPost">
-        <p v-if="post.user">{{ post.user.username }}</p>
-        <h2>{{ post.title }}</h2>
-        <p>{{ post.content }}</p>
-      </div>
-      <div class="imagePost"><img :src="post.imageUrl" alt="" /></div>
-      <div class="buttonPost">
-        <button v-if="isAdmin === 1 || post.user.username === username" @click.prevent="displayEditPost(post)">Modifier</button>
-        <button v-if="isAdmin === 1 || post.user.username === username" @click.prevent="deletePost(post)">Supprimer</button>
-      </div>
-      <div v-if="post.displayInput == true">
+  <div v-if="userId">
+    <div class="forum">
+      <form>
         <input type="text" v-model="title" placeholder="Titre" />
         <textarea
-          id="text"
+        placeholder="Contenu"
+          id="content"
           v-model="content"
           rows="10"
           maxlength="200"
         ></textarea>
-        <input type="file" id="pictureUpdate" />
-        <button @click.prevent="updatePost(post), noneEditPost(post)">
-          Envoyer
-        </button>
-        <button @click="noneEditPost(post)">Annuler</button>
+        <div class="buttonForm">
+          <input type="file" id="picture" />
+          <button @click.prevent="sendPost()">Publier</button>
+        </div>
+      </form>
+      <div class="post" v-for="post in posts" :key="post.id">
+        <div class="textPost">
+          <h2 v-if="post.user">{{ post.user.username }}</h2>
+          <h3>{{ post.title }}</h3>
+          <p>{{ post.content }}</p>
+        </div>
+        <div class="imagePost"><img :src="post.imageUrl" alt="" /></div>
+        <div class="buttonPost">
+          <button
+            v-if="isAdmin === 1 || post.user.username === username"
+            @click.prevent="displayEditPost(post)"
+          >
+            Modifier
+          </button>
+          <button
+            v-if="isAdmin === 1 || post.user.username === username"
+            @click.prevent="deletePost(post)"
+          >
+            Supprimer
+          </button>
+        </div>
+        <div class="modif" v-if="post.displayInput == true">
+          <input type="text" v-model="title" placeholder="Titre" />
+          <textarea
+          placeholder="Contenu"
+            id="text"
+            v-model="content"
+            rows="10"
+            maxlength="200"
+          ></textarea>
+          <input type="file" id="pictureUpdate" />
+          <button @click.prevent="updatePost(post), noneEditPost(post)">
+            Envoyer
+          </button>
+          <button @click="noneEditPost(post)">Annuler</button>
+        </div>
+        <Comment :postId="post.id" />
       </div>
-      <Comment :postId="post.id" />
     </div>
+  </div>
+  <div v-else>
+    <h2>Veuillez vous identifier ici :</h2>
+    <br />
+    <router-link to="/account">Identifiez-vous</router-link>
   </div>
 </template>
 
@@ -63,13 +78,15 @@ export default {
       content: "",
       imageUrl: "",
       postId: "",
-      isAdmin: parseInt(localStorage.getItem("isAdmin")),
-      username: localStorage.getItem("username")       
+      isAdmin: 0,
+      username: "",
+      userId: localStorage.getItem("token"),
     };
   },
   methods: {
     // METHODES POUR LES POSTS
     sendPost() {
+      if (this.title !== "" || this.content !== "") {
       let img = document.getElementById("picture").files[0];
       var formData = new FormData();
       formData.append("title", this.title);
@@ -82,6 +99,8 @@ export default {
           },
         })
         .then((response) => {
+          this.title = "";
+          this.content = "";
           let idPost = response.data.id;
           axios
             .get(`http://localhost:3000/api/posts/${idPost}`, {
@@ -93,6 +112,9 @@ export default {
               this.posts.splice(0, 0, response.data);
             });
         });
+      } else {
+        alert('Veuillez renseigner le(s) champs manquants !')
+      }
     },
     getAllPosts() {
       axios
@@ -115,26 +137,32 @@ export default {
     },
     noneEditPost(post) {
       post.displayInput = false;
+      this.content="";
+      this.title="";
     },
     updatePost(post) {
       console.log(post.id);
-      let img = document.getElementById("pictureUpdate").files[0];
-      var formData = new FormData();
-      formData.append("title", this.title);
-      formData.append("content", this.content);
-      formData.append("imageUrl", img);
-      if (confirm("Voulez-vous poursuivre la modification ?")) {
-        axios
-          .put("http://localhost:3000/api/posts/" + post.id, formData, {
-            headers: {
-              Authorization: "Bearer " + localStorage.getItem("token"),
-            },
-          })
-          .then((response) => {
-            console.log(response);
+      if (this.title !== "" || this.content !== "") {
+        let img = document.getElementById("pictureUpdate").files[0];
+        var formData = new FormData();
+        formData.append("title", this.title);
+        formData.append("content", this.content);
+        formData.append("imageUrl", img);
+        if (confirm("Voulez-vous poursuivre la modification ?")) {
+          axios
+            .put("http://localhost:3000/api/posts/" + post.id, formData, {
+              headers: {
+                Authorization: "Bearer " + localStorage.getItem("token"),
+              },
+            })
+            .then((response) => {
+              console.log(response);
 
-            window.location.reload();
-          });
+              window.location.reload();
+            });
+        }
+      } else {
+        alert('Veuillez renseigner le(s) champs manquants !')
       }
     },
     deletePost(post) {
@@ -153,9 +181,27 @@ export default {
           });
       }
     },
+    getUserByToken() {
+      axios
+        .post(
+          "http://localhost:3000/api/users/jwt",
+          {},
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+          }
+        )
+        .then((response) => {
+          this.isAdmin = response.data.isAdmin;
+          this.username = response.data.username;
+          console.log(response.data);
+        });
+    },
   },
   mounted() {
     this.getAllPosts();
+    this.getUserByToken();
   },
 };
 </script>
@@ -164,16 +210,52 @@ export default {
 form {
   display: flex;
   flex-direction: column;
+  margin-bottom: 50px;
+  .buttonForm {
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-between;
+    input,
+    button {
+      cursor: pointer;
+    }
+  }
 }
 .post {
   width: 70%;
   margin: auto;
-  background-color: darkgrey;
+  margin-bottom: 20px;
+  border: 2px solid #ee9696;
+  border-radius: 15px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  .textPost {
+    h2 {
+      color: #d44c5c;
+    }
+  }
+  button {
+    border-radius: 5px;
+    font-size: 1.2em;
+    width: 150px;
+    margin: 10px 0;
+    padding: 5px;
+    background: #0c2444;
+    color: #fff;
+    cursor: pointer;
+    border: 1px solid #0c2444;
+  }
   img {
     width: 25vw;
+  }
+  .modif {
+    display: flex;
+    flex-direction: column;
+  }
+  .comment {
+    display: flex;
+    flex-direction: column;
   }
 }
 </style>

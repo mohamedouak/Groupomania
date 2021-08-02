@@ -1,5 +1,5 @@
 <template>
-  <div class="signup">
+  <div class="login">
     <img alt="Vue logo" src="../assets/icon-left-font-monochrome-black.png" />
     <h1>Connexion</h1>
     <input type="text" v-model="username" placeholder="Pseudo" />
@@ -32,8 +32,6 @@ export default {
           .then((res) => {
             console.log(res.data);
             localStorage.setItem("token", res.data.token);
-            localStorage.setItem("username", res.data.username);
-            localStorage.setItem("isAdmin", res.data.isAdmin);
             if (res.status == 200) {
               this.$router.push({ name: "Account" });
             }
@@ -47,4 +45,56 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss">
+.login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  img {
+    width: 250px;
+    height: 100px;
+    margin: 25px 0;
+    object-fit: cover;
+  }
+  h1 {
+    color: #0c2444;
+  }
+  input {
+    font-size: 1.2em;
+    width: 300px;
+    height: 40px;
+    padding: 10px;
+    display: block;
+    margin: 10px 0;
+    @media screen and (max-width: 768px) {
+    font-size: 1em;
+    width: 200px;
+    height: 20px;
+    padding: 10px;
+    }
+  }
+  button {
+    border-radius: 5px;
+    font-size: 1.2em;
+    width: 300px;
+    height: 40px;
+    padding: 10px;
+    margin: 10px 0;
+    background: #0c2444;
+    color: #fff;
+    cursor: pointer;
+    border: 1px solid #0c2444;
+    @media screen and (max-width: 768px) {
+    font-size: 1em;
+    width: 200px;
+    padding: 10px;
+    }
+  }
+  a {
+    text-decoration-line: none;
+    color: black;
+    cursor: pointer;
+  }
+}
+</style>

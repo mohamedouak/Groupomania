@@ -3,6 +3,7 @@ const passwordValidator = require('password-validator');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const {User, Post, Comment} = require('../sequelize');
+require('dotenv').config
 
 const schema = new passwordValidator;
 
@@ -64,7 +65,7 @@ exports.login = (req, res) => {
                             } else {
                                 res.status(200).json({
                                     username: user.username,
-                                    token: jwt.sign({ userId: user.id }, '7fa4efcef04a839925bf05fb227487cc', { expiresIn: '24h' }), 
+                                    token: jwt.sign({ userId: user.id }, process.env.TOKEN_KEY, { expiresIn: '24h' }), 
                                     isAdmin: user.isAdmin
                                 });
                             }
@@ -140,7 +141,7 @@ exports.getAllUsers = (req, res) => {
 exports.getUserByJwt = (req, res) => {
     console.log(req.headers);
     const token = req.headers.authorization.split(' ')[1];
-    const decodedToken = jwt.verify(token, '7fa4efcef04a839925bf05fb227487cc');
+    const decodedToken = jwt.verify(token, process.env.TOKEN_KEY);
     const userId = decodedToken.userId;
     console.log(req.headers.authorization.split(' '));
     
