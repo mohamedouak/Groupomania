@@ -21,6 +21,10 @@ export default {
   img {
     object-fit: cover;
     width: 50vw;
+    margin-bottom: 150px;
+     @media screen and (max-width: 768px) {
+       width: 80vw;
+     }
   }
   .ident {
     width: 80%;
@@ -33,6 +37,9 @@ export default {
       font-weight: bold;
       font-size: 1.5em;
       cursor: pointer;
+      &:hover {
+        color: #d44c5c;
+      }
       @media screen and (max-width: 768px) {
         font-size: 1em;
       }
