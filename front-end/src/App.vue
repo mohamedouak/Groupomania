@@ -12,11 +12,13 @@
 <script>
 export default {
   name: "App",
-}
+};
 </script>
 
-
 <style lang="scss">
+body {
+  background-color: lightgrey;
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -34,18 +36,16 @@ export default {
     text-decoration-line: none;
 
     &.router-link-exact-active {
-      color: rgb(238, 150, 
-150);
+      color: rgb(238, 150, 150);
     }
   }
 }
-
 
 .connect {
   p {
     display: flex;
     justify-content: center;
-    button {    
+    button {
       padding: 10px;
       background: skyblue;
       color: #fff;
@@ -54,6 +54,6 @@ export default {
       margin: 20px 10px;
       cursor: pointer;
     }
-  }  
+  }
 }
 </style>

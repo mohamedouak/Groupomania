@@ -30,7 +30,7 @@ export default {
         email: this.email,
         password: this.password,
       });
-      if (result.status == 201) {
+      if (result.status === 201) {
         this.$router.push({ name: "Login" });
       }
     },
@@ -60,10 +60,10 @@ export default {
     display: block;
     margin: 10px 0;
     @media screen and (max-width: 768px) {
-    font-size: 1em;
-    width: 200px;
-    height: 20px;
-    padding: 10px;
+      font-size: 1em;
+      width: 200px;
+      height: 20px;
+      padding: 10px;
     }
   }
   button {
@@ -79,9 +79,9 @@ export default {
     cursor: pointer;
     border: 1px solid #0c2444;
     @media screen and (max-width: 768px) {
-    font-size: 1em;
-    width: 200px;
-    padding: 10px;
+      font-size: 1em;
+      width: 200px;
+      padding: 10px;
     }
   }
   a {

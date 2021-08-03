@@ -4,13 +4,6 @@ const fs = require("fs");
 const token = require("../utilis/getUserIdByJwt");
 
 exports.createPost = async (req, res) => {
-  console.log(req.body);
-  console.log("req.file", req.file);
-//   if (!req.body.title || !req.body.content) {
-//     return res
-//       .status(400)
-//       .json({ error: "Tous les champs doivent être remplis" });
-//   }
   const post = {
     userId: token.getUserIdByJwt(req),
     title: req.body.title,
@@ -19,7 +12,6 @@ exports.createPost = async (req, res) => {
       ? `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
       : null,
   };
-  console.log(post);
   const newPost = await Post.create(post);
   if (newPost) {
     res.status(201).json(newPost);
@@ -30,14 +22,15 @@ exports.createPost = async (req, res) => {
 
 exports.getOnePost = (req, res) => {
   const id = req.params.id;
-  Post.findOne({ where: { id: req.params.id},    
-      include: [
-        {
-          model: User,
-          attributes: ["username", "email"],
-        },
-      ],
-    })
+  Post.findOne({
+    where: { id: req.params.id },
+    include: [
+      {
+        model: User,
+        attributes: ["username", "email"],
+      },
+    ],
+  })
     .then((post) => {
       if (post) {
         res.status(200).json(post);
@@ -71,7 +64,6 @@ exports.getAllPosts = (req, res) => {
 };
 
 exports.updatePost = (req, res) => {
-  console.log(req.body.title);
   const id = req.params.id;
   const updatedPost = {
     title: req.body.title,

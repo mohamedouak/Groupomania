@@ -2,15 +2,21 @@
   <div v-if="userId">
     <div class="forum">
       <form>
-        <input type="text" v-model="title" placeholder="Titre" />
-        <textarea
-        placeholder="Contenu"
-          id="content"
-          v-model="content"
-          rows="10"
-          maxlength="200"
-        ></textarea>
-        <div class="buttonForm">
+        <div class="inputButtonForm">
+          <input
+            type="text"
+            v-model="title"
+            placeholder="Titre"
+            class="titlePost"
+          />
+          <textarea
+            placeholder="Contenu"
+            id="content"
+            v-model="content"
+            rows="10"
+            maxlength="200"
+          ></textarea>
+
           <input type="file" id="picture" />
           <button @click.prevent="sendPost()">Publier</button>
         </div>
@@ -36,10 +42,10 @@
             Supprimer
           </button>
         </div>
-        <div class="modif" v-if="post.displayInput == true">
+        <div class="modif" v-if="post.displayInput === true">
           <input type="text" v-model="title" placeholder="Titre" />
           <textarea
-          placeholder="Contenu"
+            placeholder="Contenu"
             id="text"
             v-model="content"
             rows="10"
@@ -55,8 +61,8 @@
       </div>
     </div>
   </div>
-  <div v-else>
-    <h2>Veuillez vous identifier ici :</h2>
+  <div class="disconnect" v-else>
+    <p>Veuillez vous identifier en cliquant sur le lien ci-dessous</p>
     <br />
     <router-link to="/account">Identifiez-vous</router-link>
   </div>
@@ -87,33 +93,33 @@ export default {
     // METHODES POUR LES POSTS
     sendPost() {
       if (this.title !== "" || this.content !== "") {
-      let img = document.getElementById("picture").files[0];
-      var formData = new FormData();
-      formData.append("title", this.title);
-      formData.append("content", this.content);
-      formData.append("imageUrl", img);
-      axios
-        .post("http://localhost:3000/api/posts", formData, {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"),
-          },
-        })
-        .then((response) => {
-          this.title = "";
-          this.content = "";
-          let idPost = response.data.id;
-          axios
-            .get(`http://localhost:3000/api/posts/${idPost}`, {
-              headers: {
-                Authorization: "Bearer " + localStorage.getItem("token"),
-              },
-            })
-            .then((response) => {
-              this.posts.splice(0, 0, response.data);
-            });
-        });
+        let img = document.getElementById("picture").files[0];
+        var formData = new FormData();
+        formData.append("title", this.title);
+        formData.append("content", this.content);
+        formData.append("imageUrl", img);
+        axios
+          .post("http://localhost:3000/api/posts", formData, {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+          })
+          .then((response) => {
+            this.title = "";
+            this.content = "";
+            let idPost = response.data.id;
+            axios
+              .get(`http://localhost:3000/api/posts/${idPost}`, {
+                headers: {
+                  Authorization: "Bearer " + localStorage.getItem("token"),
+                },
+              })
+              .then((response) => {
+                this.posts.splice(0, 0, response.data);
+              });
+          });
       } else {
-        alert('Veuillez renseigner le(s) champs manquants !')
+        alert("Veuillez renseigner le(s) champs manquants !");
       }
     },
     getAllPosts() {
@@ -135,8 +141,8 @@ export default {
     },
     noneEditPost(post) {
       post.displayInput = false;
-      this.content="";
-      this.title="";
+      this.content = "";
+      this.title = "";
     },
     updatePost(post) {
       if (this.title !== "" || this.content !== "") {
@@ -152,13 +158,13 @@ export default {
                 Authorization: "Bearer " + localStorage.getItem("token"),
               },
             })
-            .then((response) => {;
-
+            .then((response) => {
+              response.data;
               window.location.reload();
             });
         }
       } else {
-        alert('Veuillez renseigner le(s) champs manquants !')
+        alert("Veuillez renseigner le(s) champs manquants !");
       }
     },
     deletePost(post) {
@@ -170,7 +176,7 @@ export default {
             },
           })
           .then((response) => {
-
+            response.data;
             window.location.reload();
           });
       }
@@ -200,55 +206,128 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-form {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 50px;
-  .buttonForm {
-    margin-top: 30px;
+.forum {
+  padding-top: 30px;
+  form {
     display: flex;
-    justify-content: space-between;
-    input,
-    button {
-      cursor: pointer;
+    flex-direction: column;
+    margin-bottom: 50px;
+    .inputButtonForm {
+      height: 300px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 75%;
+      margin: auto;
+      @media screen and (max-width: 768px) {
+        width: 100%;
+      }
+      .titlePost,
+      #content {
+        border: 1px solid;
+        border-radius: 5px;
+        padding: 10px;
+        margin: 5px;
+      }
+      button {
+        border-radius: 5px;
+        font-size: 1.2em;
+        margin: auto;
+        padding: 5px;
+        background: #0c2444;
+        color: #fff;
+        cursor: pointer;
+        border: 1px solid #0c2444;
+        width: 100%;
+      }
+    }
+  }
+  .post {
+    width: 70%;
+    margin: auto;
+    margin-bottom: 20px;
+    padding: 20px;
+    border: 2px solid #ee9696;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    @media screen and (max-width: 768px) {
+      width: 100%;
+      padding: 0;
+    }
+    .textPost {
+      h2 {
+        color: #d44c5c;
+        font-weight: 500;
+        font-family: Raleway, sans-serif;
+      }
+    }
+    .buttonPost {
+      display: flex;
+      @media screen and (max-width: 768px) {
+        flex-direction: column;
+      }
+      button {
+        border-radius: 5px;
+        font-size: 1.2em;
+        width: 150px;
+        margin: 10px 5px;
+        padding: 5px;
+        background: #0c2444;
+        color: #fff;
+        cursor: pointer;
+        border: 1px solid #0c2444;
+        @media screen and (max-width: 768px) {
+          font-size: 1em;
+        }
+      }
+    }
+    .imagePost {
+      img {
+        width: 50vw;
+        object-fit: cover;
+      }
+    }
+    .modif {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      input,
+      textarea,
+      button {
+        width: 90%;
+        border-radius: 5px;
+        padding: 10px;
+        margin: 5px;
+      }
+      button {
+        border-radius: 5px;
+        font-size: 1.2em;
+        width: 150px;
+        margin: 10px 5px;
+        padding: 5px;
+        background: #0c2444;
+        color: #fff;
+        cursor: pointer;
+        border: 1px solid #0c2444;
+      }
     }
   }
 }
-.post {
-  width: 70%;
-  margin: auto;
-  margin-bottom: 20px;
-  border: 2px solid #ee9696;
-  border-radius: 15px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  .textPost {
-    h2 {
-      color: #d44c5c;
-    }
+.disconnect {
+  margin-top: 150px;
+  p {
+    font-size: 1.3em;
+    padding-bottom: 20px;
+    color: black;
   }
-  button {
-    border-radius: 5px;
-    font-size: 1.2em;
-    width: 150px;
-    margin: 10px 0;
-    padding: 5px;
-    background: #0c2444;
-    color: #fff;
-    cursor: pointer;
-    border: 1px solid #0c2444;
-  }
-  img {
-    width: 25vw;
-  }
-  .modif {
-    display: flex;
-    flex-direction: column;
-  }
-  .comment {
-    display: flex;
-    flex-direction: column;
+  a {
+    font-size: 1.3em;
+    margin-top: 15px;
+    text-decoration-line: none;
+    color: #0c2444;
+    font-weight: bold;
   }
 }
 </style>

@@ -31,11 +31,11 @@ export default {
           })
           .then((res) => {
             localStorage.setItem("token", res.data.token);
-            if (res.status == 200) {
+            if (res.status === 200) {
               this.$router.push({ name: "Account" });
             }
           })
-          .catch((error) => alert("error"));
+          .catch((error) => console.error(error));
       } else {
         alert("oops !");
       }
@@ -67,10 +67,10 @@ export default {
     display: block;
     margin: 10px 0;
     @media screen and (max-width: 768px) {
-    font-size: 1em;
-    width: 200px;
-    height: 20px;
-    padding: 10px;
+      font-size: 1em;
+      width: 200px;
+      height: 20px;
+      padding: 10px;
     }
   }
   button {
@@ -85,9 +85,9 @@ export default {
     cursor: pointer;
     border: 1px solid #0c2444;
     @media screen and (max-width: 768px) {
-    font-size: 1em;
-    width: 200px;
-    padding: 10px;
+      font-size: 1em;
+      width: 200px;
+      padding: 10px;
     }
   }
   a {
