@@ -51,9 +51,7 @@ export default {
   align-items: center;
   justify-content: space-between;
   img {
-    width: 250px;
-    height: 100px;
-    margin: 25px 0;
+    height: 80px;
     object-fit: cover;
   }
   h1 {
