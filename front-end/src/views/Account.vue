@@ -44,10 +44,9 @@ export default {
       axios
         .delete("http://localhost:3000/api/users/" + id)
         .then((response) => {
-          console.log(response);
           this.$router.push({ name: "Signup" });
         })
-        .catch((error) => console.log(error));
+        .catch((error) => alert("error"));
     },
     getUserByToken() {
       axios

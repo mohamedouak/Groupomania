@@ -18,7 +18,6 @@ schema
 
 // Création d'un nouvel utilisateur
 exports.signup = (req, res) => {
-    console.log(req.body);
     if (!req.body.email || !req.body.username || !req.body.password) {
         return res.status(400).json({ error: 'Tous les champs doivent être remplis' });
     }
@@ -49,7 +48,6 @@ exports.signup = (req, res) => {
 
 // Connexion de l'utilisateur à son compte
 exports.login = (req, res) => {
-    console.log(req);
     if (!req.body.username || !req.body.password) {
         return res.status(400).json({ error: 'Tous les champs doivent être remplis' });
     }
@@ -139,11 +137,9 @@ exports.getAllUsers = (req, res) => {
 };
 
 exports.getUserByJwt = (req, res) => {
-    console.log(req.headers);
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, process.env.TOKEN_KEY);
     const userId = decodedToken.userId;
-    console.log(req.headers.authorization.split(' '));
     
     if (userId) {
         User.findOne({

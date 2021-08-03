@@ -30,7 +30,6 @@ export default {
         email: this.email,
         password: this.password,
       });
-      console.log(result);
       if (result.status == 201) {
         this.$router.push({ name: "Login" });
       }

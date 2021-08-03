@@ -55,7 +55,7 @@ export default {
           }
         )
         .then((response) => {
-          console.log(response);
+          response.data
         });
       window.location.reload();
     },
@@ -68,7 +68,6 @@ export default {
         })
         .then((response) => {
           this.comments = response.data;
-          console.log("mes comments : ", response.data);
         });
     },
     displayEditComment() {
@@ -76,7 +75,6 @@ export default {
       this.content = "";
     },
     deleteComment(comment) {
-      console.log(comment);
       if (confirm("Voulez-vous poursuivre la suppression ?")) {
         axios
           .delete("http://localhost:3000/api/comments/" + comment, {
@@ -85,8 +83,6 @@ export default {
             },
           })
           .then((response) => {
-            console.log(response);
-
             window.location.reload();
           });
       }
@@ -105,7 +101,6 @@ export default {
         .then((response) => {
           this.isAdmin = response.data.isAdmin;
           this.username = response.data.username;
-          console.log(response.data);
         });
     },
   },

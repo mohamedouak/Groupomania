@@ -128,12 +128,10 @@ export default {
           this.posts.forEach(function(post) {
             post.displayInput = false;
           });
-          console.log("mes posts : ", response.data);
         });
     },
     displayEditPost(post) {
       post.displayInput = true;
-      console.log(post);
     },
     noneEditPost(post) {
       post.displayInput = false;
@@ -141,7 +139,6 @@ export default {
       this.title="";
     },
     updatePost(post) {
-      console.log(post.id);
       if (this.title !== "" || this.content !== "") {
         let img = document.getElementById("pictureUpdate").files[0];
         var formData = new FormData();
@@ -155,8 +152,7 @@ export default {
                 Authorization: "Bearer " + localStorage.getItem("token"),
               },
             })
-            .then((response) => {
-              console.log(response);
+            .then((response) => {;
 
               window.location.reload();
             });
@@ -166,7 +162,6 @@ export default {
       }
     },
     deletePost(post) {
-      console.log(post.id);
       if (confirm("Voulez-vous poursuivre la suppression ?")) {
         axios
           .delete("http://localhost:3000/api/posts/" + post.id, {
@@ -175,7 +170,6 @@ export default {
             },
           })
           .then((response) => {
-            console.log(response);
 
             window.location.reload();
           });
@@ -195,7 +189,6 @@ export default {
         .then((response) => {
           this.isAdmin = response.data.isAdmin;
           this.username = response.data.username;
-          console.log(response.data);
         });
     },
   },

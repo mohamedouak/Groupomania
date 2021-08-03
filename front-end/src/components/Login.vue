@@ -30,15 +30,14 @@ export default {
             password: this.password,
           })
           .then((res) => {
-            console.log(res.data);
             localStorage.setItem("token", res.data.token);
             if (res.status == 200) {
               this.$router.push({ name: "Account" });
             }
           })
-          .catch((error) => console.log(error));
+          .catch((error) => alert("error"));
       } else {
-        console.log("oops !");
+        alert("oops !");
       }
     },
   },
